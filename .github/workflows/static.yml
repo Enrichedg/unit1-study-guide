@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatScie HW 2 Part C</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        label {
+            font-weight: bold;
+        }
+        input {
+            padding: 5px;
+            margin-left: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .math {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .work {
+            background: #e8f6ff;
+            padding: 10px;
+            border-left: 5px solid #2980b9;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>MatScie HW 2 Part C</h1>
+
+    <!-- Section 1: FCC Unit Cell Visualization -->
+    <div class="section">
+        <h2>1. FCC Unit Cell Visualization</h2>
+        <div id="fcc-plot"></div>
+    </div>
+
+    <!-- Section 2: Planar Packing Fraction -->
+    <div class="section">
+        <h2>2. Planar Packing Fraction (PPF)</h2>
+        <p>The PPF of the (200) plane is:</p>
+        <div class="math">
+            \[
+            \text{PPF} = \frac{\pi}{4} \approx 0.785
+            \]
+        </div>
+        <div class="work">
+            <h3>Work:</h3>
+            <p>1. The (200) plane is a face of the FCC unit cell. Its area is:</p>
+            <p>\[
+            \text{Area of plane} = a^2
+            \]</p>
+            <p>2. There are 2 full atoms in the (200) plane. Each atom has a radius:</p>
+            <p>\[
+            r = \frac{a\sqrt{2}}{4}
+            \]</p>
+            <p>3. The area of one atom is:</p>
+            <p>\[
+            \text{Area of one atom} = \pi r^2 = \pi \left(\frac{a\sqrt{2}}{4}\right)^2 = \frac{\pi a^2}{8}
+            \]</p>
+            <p>4. The total area of atoms in the plane is:</p>
+            <p>\[
+            \text{Total area of atoms} = 2 \times \frac{\pi a^2}{8} = \frac{\pi a^2}{4}
+            \]</p>
+            <p>5. The planar packing fraction is:</p>
+            <p>\[
+            \text{PPF} = \frac{\text{Area of atoms}}{\text{Area of plane}} = \frac{\frac{\pi a^2}{4}}{a^2} = \frac{\pi}{4} \approx 0.785
+            \]</p>
+        </div>
+    </div>
+
+    <!-- Section 3: Theoretical Density -->
+    <div class="section">
+        <h2>3. Theoretical Density of Cu</h2>
+        <div class="input-group">
+            <label for="lattice-param">Lattice Parameter (a, in Å):</label>
+            <input type="number" id="lattice-param" value="3.615" step="0.001">
+        </div>
+        <div class="input-group">
+            <label for="atomic-weight">Atomic Weight (g/mol):</label>
+            <input type="number" id="atomic-weight" value="63.54" step="0.01">
+        </div>
+        <button onclick="calculateDensity()">Calculate Density</button>
+        <p id="density-result" class="math"></p>
+        <div class="work" id="density-work">
+            <h3>Work:</h3>
+            <p>1. The FCC unit cell contains 4 atoms.</p>
+            <p>2. The mass of one atom is:</p>
+            <p>\[
+            \text{Mass of one atom} = \frac{\text{Atomic Weight}}{\text{Avogadro's Number}} = \frac{63.54 \, \text{g/mol}}{6.022 \times 10^{23} \, \text{atoms/mol}}
+            \]</p>
+            <p>3. The mass of 4 atoms is:</p>
+            <p>\[
+            \text{Mass of 4 atoms} = 4 \times \frac{63.54}{6.022 \times 10^{23}} \, \text{g}
+            \]</p>
+            <p>4. The volume of the unit cell is:</p>
+            <p>\[
+            \text{Volume} = a^3 = (3.615 \, \text{Å})^3
+            \]</p>
+            <p>5. The theoretical density is:</p>
+            <p>\[
+            \rho = \frac{\text{Mass of 4 atoms}}{\text{Volume}} = \frac{4 \times \frac{63.54}{6.022 \times 10^{23}}}{(3.615 \times 10^{-8} \, \text{cm})^3}
+            \]</p>
+            <p>6. Simplifying:</p>
+            <p>\[
+            \rho \approx 8.93 \times 10^{-24} \, \text{g/Å}^3
+            \]</p>
+        </div>
+    </div>
+
+    <script>
+        // FCC Unit Cell Visualization
+        const a = 3.615; // Lattice parameter in Angstroms
+        const atoms = [
+            [0, 0, 0], [a, 0, 0], [0, a, 0], [0, 0, a],
+            [a, a, 0], [a, 0, a], [0, a, a], [a, a, a],
+            [a/2, a/2, 0], [a/2, 0, a/2], [0, a/2, a/2],
+            [a/2, a/2, a], [a/2, a, a/2], [a, a/2, a/2]
+        ];
+
+        const edges = [
+            [[0, 0, 0], [a, 0, 0]], [[0, 0, 0], [0, a, 0]], [[0, 0, 0], [0, 0, a]],
+            [[a, 0, 0], [a, a, 0]], [[a, 0, 0], [a, 0, a]], [[0, a, 0], [a, a, 0]],
+            [[0, a, 0], [0, a, a]], [[0, 0, a], [a, 0, a]], [[0, 0, a], [0, a, a]],
+            [[a, a, 0], [a, a, a]], [[a, 0, a], [a, a, a]], [[0, a, a], [a, a, a]]
+        ];
+
+        const atomTrace = {
+            x: atoms.map(atom => atom[0]),
+            y: atoms.map(atom => atom[1]),
+            z: atoms.map(atom => atom[2]),
+            mode: 'markers',
+            marker: { size: 5, color: 'blue' },
+            type: 'scatter3d',
+            name: 'Atoms'
+        };
+
+        const edgeTraces = edges.map(edge => ({
+            x: [edge[0][0], edge[1][0]],
+            y: [edge[0][1], edge[1][1]],
+            z: [edge[0][2], edge[1][2]],
+            mode: 'lines',
+            line: { color: 'black', width: 2 },
+            type: 'scatter3d',
+            showlegend: false
+        }));
+
+        const layout = {
+            margin: { l: 0, r: 0, b: 0, t: 0 },
+            scene: {
+                xaxis: { title: 'X (Å)' },
+                yaxis: { title: 'Y (Å)' },
+                zaxis: { title: 'Z (Å)' }
+            }
+        };
+
+        Plotly.newPlot('fcc-plot', [atomTrace, ...edgeTraces], layout);
+
+        // Theoretical Density Calculation
+        function calculateDensity() {
+            const a = parseFloat(document.getElementById('lattice-param').value); // Lattice parameter in Å
+            const atomicWeight = parseFloat(document.getElementById('atomic-weight').value); // Atomic weight in g/mol
+
+            const avogadro = 6.022e23; // Avogadro's number
+            const volume = Math.pow(a, 3); // Volume in Å³
+            const mass = (4 * atomicWeight) / avogadro; // Mass of 4 atoms in g
+            const density = mass / volume; // Density in g/Å³
+
+            // Format the result in scientific notation
+            const densityFormatted = density.toExponential(2);
+
+            // Display the result with proper units
+            document.getElementById('density-result').innerHTML = `
+                <strong>Theoretical Density:</strong> \( \rho = ${densityFormatted} \, \text{g/Å}^3 \)
+            `;
+
+            // Re-render MathJax to properly format the LaTeX
+            MathJax.typesetPromise().then(() => {
+                console.log('MathJax rendering complete.');
+            }).catch((err) => {
+                console.error('MathJax rendering error:', err);
+            });
+        }
+    </script>
+</body>
+</html>
